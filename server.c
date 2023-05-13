@@ -5,6 +5,7 @@
 #include<sys/socket.h>
 #include<arpa/inet.h>
 #include<string.h>
+#include<unistd.h>
 int main(){
     int server_fd;
     struct sockaddr_in address,cl;
@@ -23,16 +24,29 @@ int main(){
     if(listen(server_fd,10)<0)
         puts("listen failed");
     socklen_t len;
+    while(1){
     int s=accept(server_fd,(struct sockaddr*)&cl,&len);
+    shutdown(server_fd,SHUT_RDWR);
     if(s<0){
         puts("accept failed");
     }
-    const char* h="hello";
+    const char* h="lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
+    "llllllllllllllllllllllllllllllll"
+    "llllllllllllllllllllllllllllllllllllllllllllllll"
+    "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll\n";
+    char buf[100]={0};
+    fgets(buf,100,stdin);
+    if(send(s,buf,strlen(buf),0)!=strlen(buf)){
+        puts("send fail");
+    };
     if(send(s,h,strlen(h),0)!=strlen(h)){
         puts("send fail");
     };
-    char buf[100]={0};
-    size_t ll=100;
-    int count=recv(s,buf,ll,0);
-    if(count)puts(buf);
+    if(send(s,h,strlen(h),0)!=strlen(h)){
+        puts("send fail");
+    };
+    close(s);
+    puts("closed");
+    }
+    shutdown(server_fd,0);
 }
